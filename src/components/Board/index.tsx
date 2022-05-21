@@ -3,9 +3,14 @@ import GridLayout from "react-grid-layout";
 import _ from "lodash";
 import "react-resizable/css/styles.css";
 import "react-grid-layout/css/styles.css";
-import Card, { CardType } from "./Card";
+import Card from "./Card";
+import useEditor from "../../feature/Editor/hooks/useEditor";
 
 const Board = () => {
+  const {
+    editorState: { content },
+  } = useEditor();
+
   const generateLayout = () => {
     return _.map(_.range(0, 1), function (item, i) {
       return {
@@ -18,19 +23,6 @@ const Board = () => {
       };
     });
   };
-
-  const cards: CardType[] = [
-    {
-      title: "заголовок",
-      messages: [],
-      buttons: [],
-    },
-    {
-      title: "заголовок",
-      messages: [],
-      buttons: [],
-    },
-  ];
 
   return (
     <Box
@@ -54,8 +46,8 @@ const Board = () => {
         compactType="vertical"
         draggableHandle={".card-drag-handle"}
       >
-        {cards.map((card, i) => (
-          <Card key={i} {...card} />
+        {content.map((card, i) => (
+          <Card key={i} {...card} index={i} />
         ))}
       </GridLayout>
     </Box>

@@ -9,6 +9,7 @@ export type EditorState = {
 };
 
 export type CardType = {
+  id: string;
   title: string;
   fields: CardFieldType[];
 };

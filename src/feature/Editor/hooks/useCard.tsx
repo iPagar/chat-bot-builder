@@ -26,11 +26,18 @@ const useCard = (index: number) => {
     });
   };
 
+  const removeField = (fieldIndex: number) => {
+    updateState((draft) => {
+      draft.content[index].fields.splice(fieldIndex, 1);
+    });
+  };
+
   return {
     setTitle,
     card,
     addField,
     editField,
+    removeField,
   };
 };
 

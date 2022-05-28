@@ -3,7 +3,14 @@ import { BlockType } from "../types";
 
 const messageBlock: BlockType<HTMLInputElement> = {
   name: "message",
-  Component: (props) => <Input placeholder="Введите сообщение..." {...props} />,
+  Component: ({ data, ...props }) => (
+    <Input
+      placeholder="Введите сообщение..."
+      {...props}
+      value={data}
+      fullWidth
+    />
+  ),
 };
 
 export default messageBlock;

@@ -6,29 +6,38 @@ export type BlockComponentProps<T> = {
   id: string;
 };
 
+export type BlockEdgeComponentProps<T> = BlockComponentProps<T> & {
+  canvas: RefObject<SVGSVGElement>;
+  onEdgeDropped: (x: number, y: number) => void;
+};
+
 export type BlockType<T extends HTMLElement = HTMLInputElement> =
   | BlockStandartType<T>
   | BlockEdgeType<T>;
 
-export type BlockStandartType<T extends HTMLElement = HTMLInputElement> = {
-  type: "standart";
+export type BlockCommon = {
   name: string;
-  Component: ({
-    onChange,
-    data,
-    id,
-  }: BlockComponentProps<T>) => React.ReactElement;
+  addLabel: string;
 };
 
-export type BlockEdgeType<T extends HTMLElement = HTMLInputElement> = {
-  type: "edge";
-  name: string;
-  Component: ({
-    onChange,
-    canvas,
-    data,
-    id,
-  }: BlockComponentProps<T> & {
-    canvas: RefObject<SVGSVGElement>;
-  }) => React.ReactElement;
-};
+export type BlockStandartType<T extends HTMLElement = HTMLInputElement> =
+  BlockCommon & {
+    type: "standart";
+    Component: ({
+      onChange,
+      data,
+      id,
+    }: BlockComponentProps<T>) => React.ReactElement;
+  };
+
+export type BlockEdgeType<T extends HTMLElement = HTMLInputElement> =
+  BlockCommon & {
+    type: "edge";
+    Component: ({
+      onChange,
+      canvas,
+      data,
+      id,
+      onEdgeDropped,
+    }: BlockEdgeComponentProps<T>) => React.ReactElement;
+  };

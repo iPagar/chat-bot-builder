@@ -8,16 +8,20 @@ import styles from "./styles.module.scss";
 const buttonBlock: BlockType<HTMLInputElement> = {
   type: "edge",
   name: "button",
-  Component: ({ data, id, canvas, ...props }) => {
+  addLabel: "Добавить кнопку",
+  Component: ({ data, id, canvas, onEdgeDropped, ...props }) => {
     const pointRef = useRef<HTMLDivElement>(null);
     const [isPressing, setIsPressing] = useState(false);
     const { docX, docY } = useMouse(canvas);
 
     const onMouseDown = () => {
-      setIsPressing(false);
-      window.document.body.style.pointerEvents = "auto";
-      window.document.body.style.userSelect = "auto";
-      window.document.body.style.webkitUserSelect = "auto";
+      if (isPressing) {
+        setIsPressing(false);
+        window.document.body.style.pointerEvents = "auto";
+        window.document.body.style.userSelect = "auto";
+        window.document.body.style.webkitUserSelect = "auto";
+        onEdgeDropped(docX, docY);
+      }
     };
 
     useEffect(() => {

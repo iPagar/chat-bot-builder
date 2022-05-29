@@ -14,18 +14,21 @@ export type CardType = {
   fields: CardFieldType[];
 };
 
-export type CardFieldType =
-  | {
-      name: string;
-      data: string;
-    }
-  | CardFieldEdgeType;
+export type CardFieldType = CardFieldStandartType | CardFieldEdgeType;
 
-export type CardFieldEdgeType = {
+export interface CardFieldTypeCommon {
   name: string;
-  target: string;
   data: string;
-};
+}
+
+export interface CardFieldStandartType extends CardFieldTypeCommon {
+  type: "standart";
+}
+
+export interface CardFieldEdgeType extends CardFieldTypeCommon {
+  type: "edge";
+  target: string;
+}
 
 export const EditorContext = createContext<
   (EditorState & { updateState: Updater<EditorState> }) | null

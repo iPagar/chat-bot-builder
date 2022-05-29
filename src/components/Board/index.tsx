@@ -3,7 +3,6 @@ import "react-resizable/css/styles.css";
 import "react-grid-layout/css/styles.css";
 import Card from "./Card";
 import useEditor from "../../feature/Editor/hooks/useEditor";
-import styles from "./styles.module.scss";
 import {
   DragDropContext,
   Droppable,
@@ -25,7 +24,7 @@ const getItemStyle = (
   };
 };
 
-const getListStyle = (isDraggingOver: boolean): CSSProperties => ({
+const getListStyle = (_isDraggingOver: boolean): CSSProperties => ({
   padding: grid,
   width: "80%",
 });
@@ -79,6 +78,7 @@ const Board = () => {
                 >
                   {(provided, snapshot) => (
                     <Card
+                      id={item.id}
                       canvas={svgRef}
                       ref={provided.innerRef}
                       {...provided.draggableProps}

@@ -1,14 +1,18 @@
-import { Box } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 import { PropsWithChildren } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-type BlockProps = {
+type BlockProps = BoxProps & {
   onRemove: () => void;
 };
 
-const Block = ({ children, onRemove }: PropsWithChildren<BlockProps>) => {
+const Block = ({
+  children,
+  onRemove,
+  ...props
+}: PropsWithChildren<BlockProps>) => {
   return (
-    <Box>
+    <Box {...props}>
       <Box
         sx={{
           display: "flex",

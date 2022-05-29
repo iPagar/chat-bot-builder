@@ -1,4 +1,4 @@
-import useEditor, { CardFieldType } from "./useEditor";
+import useEditor, { CardFieldEdgeType, CardFieldType } from "./useEditor";
 
 const useCard = (index: number) => {
   const {
@@ -13,6 +13,13 @@ const useCard = (index: number) => {
   };
 
   const card = editorState.content[index];
+
+  const connectField = (fieldIndex: number, cardId: string) => {
+    updateState((draft) => {
+      (draft.content[index].fields[fieldIndex] as CardFieldEdgeType).target =
+        cardId;
+    });
+  };
 
   const addField = (cardFieldType: CardFieldType) => {
     updateState((draft) => {
@@ -38,6 +45,7 @@ const useCard = (index: number) => {
     addField,
     editField,
     removeField,
+    connectField,
   };
 };
 

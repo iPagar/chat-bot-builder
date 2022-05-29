@@ -10,7 +10,7 @@ type EditorProps = {
 
 const Editor = ({ value, blocks }: EditorProps) => {
   const [state, updateState] = useImmer({ blocks, ...value });
-
+  console.log(state);
   return (
     <EditorContext.Provider value={{ ...state, updateState }}>
       <Board />

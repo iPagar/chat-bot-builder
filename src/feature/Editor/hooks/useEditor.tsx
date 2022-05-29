@@ -14,9 +14,18 @@ export type CardType = {
   fields: CardFieldType[];
 };
 
-export type CardFieldType = {
+export type CardFieldType =
+  | {
+      name: string;
+      data: string;
+    }
+  | CardFieldEdgeType;
+
+export type CardFieldEdgeType = {
+  name: string;
+  target: string;
   data: string;
-} & Pick<BlockType, "name">;
+};
 
 export const EditorContext = createContext<
   (EditorState & { updateState: Updater<EditorState> }) | null

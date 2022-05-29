@@ -2,6 +2,7 @@ import { Input } from "@mui/material";
 import { BlockType } from "../types";
 
 const messageBlock: BlockType<HTMLInputElement> = {
+  type: "standart",
   name: "message",
   Component: ({ data, ...props }) => (
     <Input

@@ -6,12 +6,12 @@ import { useMouse } from "react-use";
 import styles from "./styles.module.scss";
 
 const buttonBlock: BlockType<HTMLInputElement> = {
+  type: "edge",
   name: "button",
-  Component: ({ data, ...props }) => {
+  Component: ({ data, id, canvas, ...props }) => {
     const pointRef = useRef<HTMLDivElement>(null);
-    const svgRef = useRef<SVGSVGElement>(null);
     const [isPressing, setIsPressing] = useState(false);
-    const { docX, docY } = useMouse(svgRef);
+    const { docX, docY } = useMouse(canvas);
 
     const onMouseDown = () => {
       setIsPressing(false);
@@ -27,28 +27,33 @@ const buttonBlock: BlockType<HTMLInputElement> = {
     });
 
     useEffect(() => {
-      const node = d3.select(svgRef.current);
-      if (isPressing && pointRef.current) {
-        var x0 = pointRef.current.offsetLeft;
-        var y0 = pointRef.current.offsetTop;
-        var y1 = docX;
-        var x1 = docY;
-        var k = 10;
+      const node = d3.select(canvas.current);
+      const pathId = "path" + id;
 
-        var path = d3.path();
+      if (isPressing && pointRef.current && canvas.current) {
+        const x0 =
+          pointRef.current.getBoundingClientRect().top + window.scrollY;
+        const y0 = pointRef.current.getBoundingClientRect().right;
+        const y1 = docX;
+        const x1 = docY;
+        const k = y1 / y0;
+
+        const path = d3.path();
         path.moveTo(y0, x0);
         path.bezierCurveTo(y1 - k, x0, y0, x1, y1 - k, x1);
         path.lineTo(y1, x1);
 
-        node.select("path").remove();
+        node.select("#" + pathId).remove();
         node
           .append("path")
+          .attr("id", pathId)
           .attr("d", path.toString())
           .attr("class", styles.line);
-      } else {
-        node.select("path").remove();
       }
-    }, [docX, docY, isPressing]);
+      if (!isPressing) {
+        node.select("#" + pathId).remove();
+      }
+    }, [canvas, docX, docY, id, isPressing]);
 
     return (
       <Box
@@ -80,18 +85,6 @@ const buttonBlock: BlockType<HTMLInputElement> = {
             setIsPressing(false);
           }}
         ></div>
-        <svg
-          ref={svgRef}
-          style={{
-            left: 0,
-            position: "absolute",
-            height: "100%",
-            width: "100%",
-            opacity: 0.3,
-            background: "red",
-            pointerEvents: "none",
-          }}
-        ></svg>
       </Box>
     );
   },

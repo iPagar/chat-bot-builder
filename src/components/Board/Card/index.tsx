@@ -4,6 +4,7 @@ import {
   DetailedHTMLProps,
   forwardRef,
   HTMLAttributes,
+  RefObject,
   useState,
 } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -20,12 +21,13 @@ import { animated, useSpring } from "@react-spring/web";
 type CardProps = {
   index: number;
   dragHandleProps?: DraggableProvidedDragHandleProps;
+  canvas: RefObject<SVGSVGElement>;
 };
 
 const Card = forwardRef<
   HTMLDivElement,
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement> & CardProps, HTMLDivElement>
->(({ style, className, index, dragHandleProps, ...props }, ref) => {
+>(({ style, className, index, dragHandleProps, canvas, ...props }, ref) => {
   const [isHovered, setIsHovered] = useState(false);
   const hoveredStyles = useSpring({
     scale: isHovered ? 1.05 : 1,
@@ -93,16 +95,35 @@ const Card = forwardRef<
                 throw new Error(`${name}: block not found`);
               }
 
-              return (
-                <Block key={i} onRemove={() => removeField(i)}>
-                  {createElement(block.Component, {
-                    onChange: (e) => {
-                      editField(i, e.currentTarget.value);
-                    },
-                    data,
-                  })}
-                </Block>
-              );
+              switch (block.type) {
+                case "edge":
+                  return (
+                    <Block key={i} onRemove={() => removeField(i)}>
+                      {createElement(block.Component, {
+                        id: index.toString(),
+                        onChange: (e) => {
+                          editField(i, e.currentTarget.value);
+                        },
+                        data,
+                        canvas,
+                      })}
+                    </Block>
+                  );
+                case "standart":
+                  return (
+                    <Block key={i} onRemove={() => removeField(i)}>
+                      {createElement(block.Component, {
+                        id: index.toString(),
+                        onChange: (e) => {
+                          editField(i, e.currentTarget.value);
+                        },
+                        data,
+                      })}
+                    </Block>
+                  );
+                default:
+                  throw new Error(`block type not found`);
+              }
             })}
           </Box>
           <Button

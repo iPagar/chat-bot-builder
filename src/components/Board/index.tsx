@@ -36,23 +36,6 @@ const Board = () => {
   } = useEditor();
   const svgRef = useRef<SVGSVGElement>(null);
 
-  useEffect(() => {
-    var x0 = 0;
-    var y0 = 0;
-    var y1 = 100;
-    var x1 = 100;
-    var k = 10;
-
-    var path = d3.path();
-    path.moveTo(y0, x0);
-    path.bezierCurveTo(y1 - k, x0, y0, x1, y1 - k, x1);
-    path.lineTo(y1, x1);
-
-    const node = d3.select(svgRef.current);
-
-    node.append("path").attr("d", path.toString()).attr("class", styles.line);
-  });
-
   return (
     <Box
       sx={{
@@ -96,6 +79,7 @@ const Board = () => {
                 >
                   {(provided, snapshot) => (
                     <Card
+                      canvas={svgRef}
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       dragHandleProps={provided.dragHandleProps}
